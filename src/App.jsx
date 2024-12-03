@@ -5,8 +5,15 @@ import { useState } from "react";
 function App(){
   let [tasks, setTasks] = useState([]);
   let {register, handleSubmit, reset} = useForm();
+
+  let options = {
+    weekday: "long",
+    year: "numeric",
+  };
+
   function taskHandler(data){
-    setTasks([...tasks,data]);
+    let currentDate = new Date().toLocaleDateString('en', options); 
+    setTasks([...tasks, { ...data, date: currentDate }]); 
     reset();
   }
   return (
@@ -20,7 +27,7 @@ function App(){
 
     <div className="w-full h-screen mt-32">
       {
-        tasks.length > 0 ? tasks.map(task=> <Card title={task.title} desc={task.desc}/>) : <h1 className="text-center font-bold text-xl">No Tasks</h1>
+        tasks.length > 0 ? (tasks.map((task, index) => (<Card key={index} title={task.title} desc={task.desc} date={task.date} />))) : <h1 className="text-center font-bold text-xl">No Tasks</h1>
       }
     </div>
 
